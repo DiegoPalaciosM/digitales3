@@ -10,10 +10,21 @@ app.config['MYSQL_PASSWORD'] = '2469'
 app.config['MYSQL_DB'] = 'Horario'
 app.secret_key = 'UwU'
 mysql = MySQL(app)
+mysql = MySQLdb.connect('localhost','root','2469','Horario')
 
 # Activadores Puertas
 ard = {'L1-General': '/dev/ttyACM0', 'L2-Industrial': '/dev/ttyACM0', 'L3-Materiales': '/dev/ttyACM0',
        'L4-Electromedicina': '/dev/ttyACM0', 'L5-Telecomunicaciones': '/dev/ttyACM0', 'L6-Software': '/dev/ttyACM0'}
+
+# Revisar horarios
+def Automatico():
+    print ("db")
+
+def AutomaticoA():
+    print("Abrir")
+
+def AutomaticoC():
+    print ("Cerrar")
 
 # Pagina
 @app.route('/')
@@ -40,8 +51,7 @@ def Auth():
         user = request.form['user']
         passw = request.form['pass']
         cur = mysql.connection.cursor()
-        cur.execute(
-            'SELECT * FROM users WHERE account = %s AND pass = %s', (user, passw))
+        cur.execute('SELECT * FROM users WHERE account = %s AND pass = %s', (user, passw))
         data = cur.fetchone()
         print(data)
         cur.close()
