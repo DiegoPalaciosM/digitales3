@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    {% with mensajes = get_flashed_messages() %}
+      {% if mensajes %}
+        {% for mensaje in mensajes%}
+          {% if mensaje == 'Laboratorio no valido' %}
+            <div class="alert alert-danger alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>{{ mensaje }}</strong>
+            </div>
+          {% else %}
+            <div class="alert alert-success alert-dismissible">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>{{ mensaje }}</strong>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class="row">
+
+  <div class="col-md-3">  </div>
+  <div class="col-md-3">
+    <div class="card card-body">
+      <form action='/abrir' method='POST'>
+        <div class="form-group">
+         <select class="form-control" name='laboratorio' id="laboratorio">
+           <option>Seleccionar Laboratorio</option>
+           <option>L1-General</option>
+           <option>L2-Industrial</option>
+           <option>L3-Materiales</option>
+           <option>L4-Electromedicina</option>
+           <option>L5-Telecomunicaciones</option>
+           <option>L6-Software</option>
+         </select>
+        </div>
+        <div class="form-group">
+          <button class="submit btn btn-primary btn-block">Abrir</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-body">
+      <form action='/cerrar' method='POST'>
+        <div class="form-group">
+         <select class="form-control" name='laboratorio' id="laboratorio">
+           <option>Seleccionar Laboratorio</option>
+           <option>L1-General</option>
+           <option>L2-Industrial</option>
+           <option>L3-Materiales</option>
+           <option>L4-Electromedicina</option>
+           <option>L5-Telecomunicaciones</option>
+           <option>L6-Software</option>
+         </select>
+        </div>
+        <div class="form-group">
+          <button class="submit btn btn-primary btn-block">Cerrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+
+</div>
