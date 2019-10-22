@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 import serial
+import MySQLdb as sqlnoflask
 
 # Configuracion inical
 app = Flask(__name__)
@@ -10,15 +11,17 @@ app.config['MYSQL_PASSWORD'] = '2469'
 app.config['MYSQL_DB'] = 'Horario'
 app.secret_key = 'UwU'
 mysql = MySQL(app)
-mysql = MySQLdb.connect('localhost','root','2469','Horario')
+noflask = sqlnoflask.connect('localhost','root','2469','Horario')
 
-# Activadores Puertas
+# Varibles necesarias
 ard = {'L1-General': '/dev/ttyACM0', 'L2-Industrial': '/dev/ttyACM0', 'L3-Materiales': '/dev/ttyACM0',
        'L4-Electromedicina': '/dev/ttyACM0', 'L5-Telecomunicaciones': '/dev/ttyACM0', 'L6-Software': '/dev/ttyACM0'}
+global laboratorio, laboratorio1, hora, hora1, data
+laboratorio = laboratorio1 = hora1 = data = ''
 
 # Revisar horarios
 def Automatico():
-    print ("db")
+    print("Automatico")
 
 def AutomaticoA():
     print("Abrir")
