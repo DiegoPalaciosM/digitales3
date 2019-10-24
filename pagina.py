@@ -166,6 +166,4 @@ def Cerrar():
 
 # Iniciar pagina
 if __name__ == '__main__':
-    app.run(host='192.168.0.3',port=80,debug=True)
-    #app.run(debug=True)
-    #app.run(host = '10.147.17.207',port = 80,debug=True)
+    app.run(debug=True)
