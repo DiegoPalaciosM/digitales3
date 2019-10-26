@@ -157,5 +157,5 @@ if __name__ == '__main__':
     #app.run(host='172.17.92.98',port=80,debug=True) # AI_LAB
     #app.run(debug=True) # Localhost
     #app.run(host='10.147.17.207', port=80, debug=True) #ZeroTier
-    #app.run(host='192.168.0.2',port=80,debug=True) #Wifi
-    app.run(host='192.168.0.9',port=80,debug=True) #Lan
+    app.run(host='192.168.0.2',port=80,debug=True) #Wifi
+    #app.run(host='192.168.0.9',port=80,debug=True) #Lan
