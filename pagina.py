@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
 import serial
-import MySQLdb as sqlnoflask
+import TCP
 
 # Configuracion inical
 app = Flask(__name__)
@@ -11,23 +11,11 @@ app.config['MYSQL_PASSWORD'] = '2469'
 app.config['MYSQL_DB'] = 'Horario'
 app.secret_key = 'UwU'
 mysql = MySQL(app)
-noflask = sqlnoflask.connect('localhost','root','2469','Horario')
 
-# Varibles necesarias
-ard = {'L1-General': '/dev/ttyACM0', 'L2-Industrial': '/dev/ttyACM0', 'L3-Materiales': '/dev/ttyACM0',
-       'L4-Electromedicina': '/dev/ttyACM0', 'L5-Telecomunicaciones': '/dev/ttyACM0', 'L6-Software': '/dev/ttyACM0'}
-global laboratorio, laboratorio1, hora, hora1, data
-laboratorio = laboratorio1 = hora1 = data = ''
+# Direcctorio laboratorio
 
-# Revisar horarios
-def Automatico():
-    print("Automatico")
-
-def AutomaticoA():
-    print("Abrir")
-
-def AutomaticoC():
-    print ("Cerrar")
+dion = {'L1-General':'1','L2-Industrial':'2','L3-Materiales':'3','L4-Electromedicina':'4','L5-Telecomunicaciones':'5','L6-Software':'6'}
+dioff = {'L1-General':'a','L2-Industrial':'b','L3-Materiales':'c','L4-Electromedicina':'d','L5-Telecomunicaciones':'e','L6-Software':'f'}
 
 # Pagina
 @app.route('/')
@@ -37,7 +25,7 @@ def main():
     data = cur.fetchall()
     cur.close()
     if 'account' in session:
-        acc = session['account']
+        acc = session['account'].title()
     else:
         acc = ''
     if 'Logged' in session:
@@ -54,7 +42,8 @@ def Auth():
         user = request.form['user']
         passw = request.form['pass']
         cur = mysql.connection.cursor()
-        cur.execute('SELECT * FROM users WHERE account = %s AND pass = %s', (user, passw))
+        cur.execute(
+            'SELECT * FROM users WHERE account = %s AND pass = %s', (user, passw))
         data = cur.fetchone()
         print(data)
         cur.close()
@@ -88,10 +77,11 @@ def Modificar():
             if lab != 'Seleccionar Laboratorio':
                 lab = request.form['laboratorio']
             else:
-                flash('Ingrese un laboratorio valido')
-                return (redirect(url_for('Editar_Horario')))
+                flash('Laboratorio no valido')
+                return (redirect(url_for('main')))
         if request.form['lunes'] != "":
             lunes = request.form['lunes']
+            lfin = request.form['lfin']
         else:
             lunes = "No"
         if request.form['martes'] != "":
@@ -117,8 +107,8 @@ def Modificar():
         if request.form['clase']:
             clase = request.form['clase']
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO uno (Clase, Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Laboratorio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);',
-                        (clase, lunes, martes, miercoles, jueves, viernes, sabado, lab))
+            cur.execute('INSERT INTO uno (Clase, Lunes, LFin, Martes, Miercoles, Jueves, Viernes, Sabado, Laboratorio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);',
+                        (clase, lunes, lfin, martes, miercoles, jueves, viernes, sabado, lab))
             mysql.connection.commit()
             flash('Horario Actualizado')
             return (redirect(url_for('main')))
@@ -140,13 +130,12 @@ def Eliminar(id):
 def Abrir():
     if request.method == 'POST':
         lab = request.form['laboratorio']
-        if lab == 'Laboratorio':
+        if lab == 'Seleccionar Laboratorio':
             flash('Laboratorio no valido')
-            return redirect(url_for('main'))
-        acc = serial.Serial(ard.get(lab), 9600)
-        acc.write('1'.encode())
-        acc.close()
-        flash('Seguro de %s abierto' % lab)
+            return (redirect(url_for('main')))
+        mensaje = dion[lab]
+        TCP.funcion(mensaje)
+        flash('Seguro de %s abierto' % (lab))
     return redirect(url_for('main'))
 
 
@@ -154,16 +143,19 @@ def Abrir():
 def Cerrar():
     if request.method == 'POST':
         lab = request.form['laboratorio']
-        if lab == 'Laboratorio':
+        if lab == 'Seleccionar Laboratorio':
             flash('Laboratorio no valido')
-            return redirect(url_for('main'))
-        acc = serial.Serial(ard.get(lab), 9600)
-        acc.write('0'.encode())
-        acc.close()
-        flash('Seguro de %s cerrado' % lab)
+            return (redirect(url_for('main')))
+        mensaje = dioff[lab]
+        TCP.funcion(mensaje)
+        flash('Seguro de %s cerrado' % (lab))
     return redirect(url_for('main'))
 
 
 # Iniciar pagina
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(host='172.17.92.98',port=80,debug=True) # AI_LAB
+    #app.run(debug=True) # Localhost
+    #app.run(host='10.147.17.207', port=80, debug=True) #ZeroTier
+    #app.run(host='192.168.0.2',port=80,debug=True) #Wifi
+    app.run(host='192.168.0.9',port=80,debug=True) #Lan

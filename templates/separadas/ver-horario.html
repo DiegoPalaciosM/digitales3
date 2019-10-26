@@ -1,20 +1,20 @@
 <div class="row">
   <div class="col-md-14 overflow-auto table-wrapper-scroll-y my-custom-scrollbar2">
     <table class="table table-striped table-hover table-bordered table-sm bg-white">
-     <thead>
-       <tr>
-         <td>Laboratorio</td>
-         <td>Clase</td>
-         <td>Lunes</td>
-         <td>Martes</td>
-         <td>Miercoles</td>
-         <td>Jueves</td>
-         <td>Viernes</td>
-         <td>Sabado</td>
-       </tr>
-     </thead>
-     <tbody>
-       {% for horario in horarios%}
+      <thead>
+        <tr>
+          <td>Laboratorio</td>
+          <td>Clase</td>
+          <td>Lunes</td>
+          <td>Martes</td>
+          <td>Miercoles</td>
+          <td>Jueves</td>
+          <td>Viernes</td>
+          <td>Sabado</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for horario in horarios%}
         <tr>
           <td>{{ horario.8 }}</td>
           <td>{{ horario.1 }}</td>
@@ -25,8 +25,8 @@
           <td>{{ horario.6 }}</td>
           <td>{{ horario.7 }}</td>
         </tr>
-       {% endfor %}
-     </tbody>
+        {% endfor %}
+      </tbody>
     </table>
   </div>
 </div>

@@ -1,23 +1,23 @@
 <div class="row">
-  <div class="col-md-4">  </div>
+  <div class="col-md-4"> </div>
   <div class="col-md-4">
     {% with mensajes = get_flashed_messages() %}
     {% if mensajes %}
     {% for mensaje in mensajes%}
     <div class="alert alert-danger alert-dismissible">
-       <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-       <strong>{{ mensaje }}</strong>
-     </div>
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>{{ mensaje }}</strong>
+    </div>
     {% endfor %}
     {% endif %}
     {% endwith %}
     <div class="card card-body">
       <form action='/auth' method='POST'>
         <div class="form-group">
-          <input type='text' name='user' placeholder='Usuario' class ="form-control">
+          <input type='text' name='user' placeholder='Usuario' class="form-control">
         </div>
         <div class="form-group">
-          <input type='password' name='pass' placeholder='Contraseña' class ="form-control">
+          <input type='password' name='pass' placeholder='Contraseña' class="form-control">
         </div>
         <div class="form-group">
           <button class="submit btn btn-primary btn-block">

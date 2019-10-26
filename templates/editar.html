@@ -16,6 +16,7 @@
   <!-- Custom fonts for this template -->
   <link href="static/vendor/fontawesome-free/css/all.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- Custom styles for this template -->
@@ -30,7 +31,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#inicio">Inicio</a>
+        <a class="navbar-brand js-scroll-trigger" href="#inicio"><h4>Inicio</h4></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         Menu
         <i class="fas fa-bars"></i>
@@ -38,58 +39,67 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#horario">Horario</a>
+            <a class="nav-link js-scroll-trigger" href="#horario"><h4>Horario</h4></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#acciones">Acciones</a>
+            <a class="nav-link js-scroll-trigger" href="#acciones"><h4>Acciones</h4></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#user">{{ user }}</a>
+            <a class="nav-link js-scroll-trigger" href="#contacto"><h4>Contacto</h4></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="/logout">Log Out</a>
+            <a class="nav-link js-scroll-trigger"><h4>{{ user }}</h4></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="/logout"> <h4>Log Out</h4> </a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
+
   <!-- Header -->
   <header class="masthead">
-    <div class="container d-flex h-100 align-items-center">
-      <div class="mx-auto text-center">
-        <h1 class="mx-auto my-0">A.O.D</h1>
-      </div>
-    </div>
-    <li></li>
-    <div class="row">
+    <div class="row d-flex h-35 align-items-center">
       <div class="col-md-2"></div>
       <div class="col-md-8">
         {% with mensajes = get_flashed_messages() %}
-        {% if mensajes %}
-        {% for mensaje in mensajes%}
-        {% if mensaje == 'Laboratorio no valido' %}
-        <div class="alert alert-danger alert-dismissible">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>{{ mensaje }}</strong>
-        </div>
-        {% else %}
-        <div class="alert alert-success alert-dismissible">
-          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>{{ mensaje }}</strong>
-        </div>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
+          {% if mensajes %}
+            {% for mensaje in mensajes%}
+              {% if mensaje == 'Laboratorio no valido' %}
+                <div class="alert alert-danger alert-dismissible">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ mensaje }}</strong>
+                </div>
+              {% elif mensaje == 'Clase no puede estar vacio' %}
+                <div class="alert alert-danger alert-dismissible">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ mensaje }}</strong>
+                </div>
+              {% else %}
+                <div class="alert alert-success alert-dismissible">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  <strong>{{ mensaje }}</strong>
+                </div>
+              {%- endif %}
+            {% endfor %}
+          {% endif %}
         {% endwith %}
       </div>
     </div>
+    <div class="container d-flex h-custom align-items-center">
+      <div class="mx-n5 text-left">
+        <h1 class="mx-n5 my-0">Automatic </br>Open Door</h1>
+      </div>
+    </div>
+
   </header>
 
   <!-- Horario -->
-  <section id="horario" class="projects-section text-center bg-black">
+  <section id="horario" class="horario-section text-center bg-black">
     <div class="row">
       <div class="col-md-1"></div>
-      <div class="col-md-3">
+      <div class="col-md-2.5">
         <div class="card card-body">
           <form action='/modificar' method='POST'>
             <div class="form-group">
@@ -104,25 +114,97 @@
               </select>
             </div>
             <div class="form-group">
-              <input type='text' name='clase' placeholder='Clase' class="form-control">
+              <input type='text' name='clase' placeholder='Clase*' class="form-control">
+            </div>
+            <div>
+              Lunes
             </div>
             <div class="form-group">
-              <input type='text' name='lunes' placeholder='Lunes' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='lunes' placeholder='Lunes' class="form-control">
+                  <input type='time' name='lfin' placeholder='LFin' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div>
+              Martes
             </div>
             <div class="form-group">
-              <input type='text' name='martes' placeholder='Martes' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='martes' placeholder='Martes' class="form-control">
+                  <input type='time' name='mafin' placeholder='MaFin' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div>
+              Miercoles
             </div>
             <div class="form-group">
-              <input type='text' name='miercoles' placeholder='Miercoles' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='miercoles' placeholder='Miercoles' class="form-control">
+                  <input type='time' name='mifin' placeholder='MiFin' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div>
+              Jueves
             </div>
             <div class="form-group">
-              <input type='text' name='jueves' placeholder='Jueves' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='jueves' placeholder='Jueves' class="form-control">
+                  <input type='time' name='jufin' placeholder='JuFin' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div>
+              Viernes
             </div>
             <div class="form-group">
-              <input type='text' name='viernes' placeholder='Viernes' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='viernes' placeholder='Viernes' class="form-control">
+                  <input type='time' name='vifin' placeholder='ViFin' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div>
+              Sabado
             </div>
             <div class="form-group">
-              <input type='text' name='sabado' placeholder='Sabado' class="form-control">
+              <div class="row">
+                <div class="col-md-4">
+                  <p>Inicio</p>
+                  <p>Final</p>
+                </div>
+                <div class="col-md-7">
+                  <input type='time' name='sabado' placeholder='Sabado' class="form-control">
+                  <input type='time' name='safin' placeholder='SaFin' class="form-control">
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <button class="submit btn btn-primary btn-block">
@@ -132,12 +214,12 @@
           </form>
         </div>
       </div>
-      <div class="col-auto table-wrapper-scroll-y my-custom-scrollbar">
+      <div class="col-md-8 table-wrapper-scroll-y my-custom-scrollbar">
         <table class="table table-striped table-hover table-bordered table-sm bg-white table-responsive">
           <thead>
             <tr>
-              <td>Laboratorio</td>
-              <td>Clase</td>
+              <td class='col-md-2'>Laboratorio</td>
+              <td class='col-md-2'>Clase</td>
               <td>Lunes</td>
               <td>Martes</td>
               <td>Miercoles</td>
@@ -150,14 +232,14 @@
           <tbody>
             {% for horario in horarios%}
             <tr>
-              <td>{{ horario.8 }}</td>
+              <td>{{ horario.14 }}</td>
               <td>{{ horario.1 }}</td>
-              <td>{{ horario.2 }}</td>
-              <td>{{ horario.3 }}</td>
-              <td>{{ horario.4 }}</td>
-              <td>{{ horario.5 }}</td>
-              <td>{{ horario.6 }}</td>
-              <td>{{ horario.7 }}</td>
+              <td>{{ horario.2 }}</br>{{ horario.3 }}</td>
+              <td>{{ horario.4 }}</br>{{ horario.5 }}</td>
+              <td>{{ horario.6 }}</br>{{ horario.7 }}</td>
+              <td>{{ horario.8 }}</br>{{ horario.9 }}</td>
+              <td>{{ horario.10 }}</br>{{ horario.11 }}</td>
+              <td>{{ horario.12 }}</td>
               <td>
                 <a href="/eliminar/{{horario.0}}" class="btn btn-danger">Eliminar
               </td>
@@ -172,13 +254,8 @@
     </div>
   </section>
 
-  <!-- Usuario -->
-  <section id="user" class="projects-section bg-black">
-    Informacion de usuario
-  </section>
-
   <!-- Acciones -->
-  <section id="acciones" class="projects-section bg-black">
+  <section id="acciones" class="login-section bg-black">
     <div class="row">
       <div class="col-md-2"> </div>
       <div class="col-md-4">
@@ -186,7 +263,7 @@
           <form action='/abrir' method='POST'>
             <div class="form-group">
               <select class="form-control" name='laboratorio' id="laboratorio">
-                <option>Laboratorio</option>
+                <option>Seleccionar Laboratorio</option>
                 <option>L1-General</option>
                 <option>L2-Industrial</option>
                 <option>L3-Materiales</option>
@@ -206,7 +283,7 @@
           <form action='/cerrar' method='POST'>
             <div class="form-group">
               <select class="form-control" name='laboratorio' id="laboratorio">
-                <option>Laboratorio</option>
+                <option>Seleccionar Laboratorio</option>
                 <option>L1-General</option>
                 <option>L2-Industrial</option>
                 <option>L3-Materiales</option>
@@ -226,15 +303,52 @@
     </div>
   </section>
 
-  <!-- Contacto   -->
-  <section id="contacto" class="contact-section bg-black">
+  <!-- Contacto -->
+  <section id='contacto' class="contact-section bg-black">
     <div class="container">
 
+      <div class="row">
+
+        <div class="col-md-4 mb-3 mb-md-0">
+          <div class="card py-4 h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+              <h4 class="text-uppercase m-0">Dirección</h4>
+              <hr class="my-4">
+              <div class="small text-black-50">Carrera 22 Calle 67 B, Av Ambalá, Ibagué, Tolima</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-3 mb-md-0">
+          <div class="card py-4 h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-envelope text-primary mb-2"></i>
+              <h4 class="text-uppercase m-0">Website</h4>
+              <hr class="my-4">
+              <div class="small text-black-50">
+                <a href="http://www.unibague.edu.co" target=»_blank>www.unibague.edu.co</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+          <div class="card py-4 h-100">
+            <div class="card-body text-center">
+              <i class="fas fa-mobile-alt text-primary mb-2"></i>
+              <h4 class="text-uppercase m-0">Teléfono</h4>
+              <hr class="my-4">
+              <div class="small text-black-50">Ni la menor idea</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="social d-flex justify-content-center">
-        <a href="https://github.com/EmmeHarma/digitales3" class="mx-2">
+        <a href ='https://github.com/EmmeHarma/digitales3' target=»_blank class="mx-5">
           <i class="fab fa-github"></i>
         </a>
       </div>
+
     </div>
   </section>
 
