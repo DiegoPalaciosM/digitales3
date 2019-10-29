@@ -1069,6 +1069,12 @@ pre code {
     max-width: 25%;
   }
 
+  .col-md-custom {
+    -ms-flex: 0 0 28%;
+    flex: 0 0 28%;
+    max-width: 24%;
+  }
+
   .col-md-4 {
     -ms-flex: 0 0 33.333333%;
     flex: 0 0 33.333333%;
@@ -1118,9 +1124,9 @@ pre code {
   }
 
   .col-md-12 {
-    -ms-flex: 0 0 100%;
-    flex: 0 0 100%;
-    max-width: 100%;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
   }
 
   .order-md-first {
@@ -8282,7 +8288,7 @@ button.bg-dark:focus {
 }
 
 .h-35 {
-  height: 30% !important;
+  height: 40% !important;
 }
 
 .h-50 {
@@ -8298,7 +8304,7 @@ button.bg-dark:focus {
 }
 
 .h-custom {
-  height: 80% !important;
+  height: 70% !important;
 }
 
 .h-auto {
@@ -8747,6 +8753,11 @@ button.bg-dark:focus {
 .ml-n5,
 .mx-n5 {
   margin-left: -3rem !important;
+}
+
+.ml-5,
+.mx-custom {
+  margin-left: -2.8rem !important;
 }
 
 .m-auto {

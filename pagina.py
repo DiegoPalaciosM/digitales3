@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysqldb import MySQL
-import serial
-import TCP
+import Acciones, sys
 
 # Configuracion inical
 app = Flask(__name__)
@@ -11,7 +10,7 @@ app.config['MYSQL_PASSWORD'] = '2469'
 app.config['MYSQL_DB'] = 'Horario'
 app.secret_key = 'UwU'
 mysql = MySQL(app)
-
+ip = sys.argv[1]
 # Direcctorio laboratorio
 
 dion = {'L1-General':'1','L2-Industrial':'2','L3-Materiales':'3','L4-Electromedicina':'4','L5-Telecomunicaciones':'5','L6-Software':'6'}
@@ -42,24 +41,54 @@ def Auth():
         user = request.form['user']
         passw = request.form['pass']
         cur = mysql.connection.cursor()
-        cur.execute(
-            'SELECT * FROM users WHERE account = %s AND pass = %s', (user, passw))
+        cur.execute('SELECT * FROM users WHERE user = %s AND pass = %s', (user, passw))
         data = cur.fetchone()
-        print(data)
-        cur.close()
+        mysql.connection.commit()
         if data:
-            if data[3] == 'Si':
+            if data[5] == 'Si':
                 session['Edit'] = True
-                session['account'] = data[1]
+                session['account'] = data[3]
                 return redirect(url_for('main'))
             session['Logged'] = True
-            session['account'] = data[1]
+            session['account'] = data[3]
             return redirect(url_for('main'))
         else:
             flash('Usuario o contraseña erroneos')
             return redirect(url_for('main'))
     return redirect(url_for('main'))
 
+@app.route('/registro', methods=['POST'])
+def Registro():
+    existe = 0
+    if request.method == 'POST':
+        user = str(request.form['user'])
+        passw = str(request.form['pass'])
+        cfpassw = str(request.form['cfpass'])
+        nombre = str(request.form['nombre'])
+        apellido = str(request.form['apellido'])
+        cur = mysql.connection.cursor()
+        cur.execute('SELECT * FROM users')
+        data = cur.fetchall()
+        mysql.connection.commit()
+        for x in data:
+            if x[1] == user:
+                existe = 1
+                print ("aqui"+str(x))
+                break
+            else:
+                existe = 0
+        if existe:
+            flash('Usuario ya existente')
+            return redirect(url_for('main'))
+        else:
+            if cfpassw == passw and user != "" and nombre != "" and apellido != "":
+                cur = mysql.connection.cursor()
+                cur.execute("INSERT INTO users (user, pass, nombre, apellido) VALUES ('%s', '%s', '%s', '%s');" % (user, passw, nombre, apellido))
+                mysql.connection.commit()
+                flash('Usuario registrado')
+                return redirect(url_for('main'))
+    flash('Error en el formulario de registro')
+    return redirect(url_for('main'))
 
 @app.route('/logout')
 def Logout():
@@ -84,31 +113,42 @@ def Modificar():
             lfin = request.form['lfin']
         else:
             lunes = "No"
+            lfin = "No"
         if request.form['martes'] != "":
             martes = request.form['martes']
+            mafin = request.form['mafin']
         else:
             martes = "No"
+            mafin = "No"
         if request.form['miercoles'] != "":
             miercoles = request.form['miercoles']
+            mifin = request.form['mifin']
         else:
             miercoles = "No"
+            mifin = "No"
         if request.form['jueves'] != "":
             jueves = request.form['jueves']
+            jufin = request.form['jufin']
         else:
             jueves = "No"
+            jufin = "No"
         if request.form['viernes'] != "":
             viernes = request.form['viernes']
+            vifin = request.form['vifin']
         else:
             viernes = "No"
+            vifin = "No"
         if request.form['sabado'] != "":
             sabado = request.form['sabado']
+            safin = request.form['safin']
         else:
             sabado = "No"
+            safin = "No"
         if request.form['clase']:
             clase = request.form['clase']
             cur = mysql.connection.cursor()
-            cur.execute('INSERT INTO uno (Clase, Lunes, LFin, Martes, Miercoles, Jueves, Viernes, Sabado, Laboratorio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);',
-                        (clase, lunes, lfin, martes, miercoles, jueves, viernes, sabado, lab))
+            cur.execute('INSERT INTO uno (Clase, Lunes, LFin, Martes, MaFin, Miercoles, MiFin, Jueves, JuFin, Viernes, ViFin, Sabado, SaFin, Laboratorio) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);',
+                        (clase, lunes, lfin, martes, mafin, miercoles, mifin, jueves, jufin, viernes, vifin, sabado, safin, lab))
             mysql.connection.commit()
             flash('Horario Actualizado')
             return (redirect(url_for('main')))
@@ -134,7 +174,7 @@ def Abrir():
             flash('Laboratorio no valido')
             return (redirect(url_for('main')))
         mensaje = dion[lab]
-        TCP.funcion(mensaje)
+        Acciones.TCP(mensaje,ip)
         flash('Seguro de %s abierto' % (lab))
     return redirect(url_for('main'))
 
@@ -147,15 +187,20 @@ def Cerrar():
             flash('Laboratorio no valido')
             return (redirect(url_for('main')))
         mensaje = dioff[lab]
-        TCP.funcion(mensaje)
+        Acciones.TCP(mensaje,ip)
         flash('Seguro de %s cerrado' % (lab))
     return redirect(url_for('main'))
+
+#Test
+@app.route('/test')
+def TEST():
+    return render_template('separadas/registro-acciones.html')
 
 
 # Iniciar pagina
 if __name__ == '__main__':
     #app.run(host='172.17.92.98',port=80,debug=True) # AI_LAB
-    #app.run(debug=True) # Localhost
+    app.run(debug=True) # Localhost
     #app.run(host='10.147.17.207', port=80, debug=True) #ZeroTier
-    app.run(host='192.168.0.2',port=80,debug=True) #Wifi
+    #app.run(host='192.168.0.4',port=80,debug=True) #Wifi
     #app.run(host='192.168.0.9',port=80,debug=True) #Lan

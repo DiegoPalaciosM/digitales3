@@ -1,14 +1,14 @@
 #include <ESP8266WiFi.h>
 WiFiServer wifiServer(42777);
-const char* ssid = "55103410";
-const char* password =  "TontinOrejon";
+const char* ssid = "";
+const char* password =  "";
 
-int L1 = 16;
-int L2 = 5;
-int L3 = 4;
-int L4 = 0;
-int L5 = 2;
-int L6 = 14;
+int L1 = 16;    //D0
+int L2 = 5;     //D1
+int L3 = 4;     //D2
+int L4 = 0;     //D3
+int L5 = 2;     //D4
+int L6 = 14;    //D5
 
 void Accion(char comando) {
 

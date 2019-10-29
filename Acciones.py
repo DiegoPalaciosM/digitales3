@@ -1,8 +1,7 @@
-
-def funcion(mensaje):
+def TCP(mensaje,ip):
         import socket
         import time
-        IP_address = '192.168.0.8'
+        IP_address = ip
         Port = 42777
         server_address = (IP_address, Port)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

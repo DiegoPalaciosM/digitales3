@@ -1,0 +1,59 @@
+{% extends "separadas/index.html" %}
+
+{% block test %}
+<div class="row">
+  <div class="col-md-custom"> </div>
+  <div class="col-md-auto align-self-center">
+    {% with mensajes = get_flashed_messages() %}
+    {% if mensajes %}
+    {% for mensaje in mensajes%}
+    {% if mensaje == 'Error en el formulario de registro' %}
+    <div class="alert alert-danger alert">
+      <a href="" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>{{ mensaje }}</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-success alert">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>{{ mensaje }}</strong>
+    </div>
+    {%- endif %}
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="card card-body">
+      <form action='/registro' method='POST'>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <input type="text" name="nombre" placeholder="Nombre" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <input type="text" name="apellido" placeholder="Apellido" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type='text' name='user' placeholder='Usuario' class="form-control">
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <input type='password' name='pass' placeholder='Contraseña' class="form-control">
+            </div>
+            <div class="col-md-6">
+              <input type='password' name='cfpass' placeholder='Confirmar Contraseña' class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+          <button class="submit btn btn-primary btn-block">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
