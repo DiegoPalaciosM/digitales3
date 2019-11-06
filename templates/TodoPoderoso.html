@@ -19,7 +19,7 @@
   <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
-  
+
 
   <!-- Custom styles for this template -->
   <link href="static/css/grayscale.css" rel="stylesheet">
@@ -102,6 +102,11 @@
         </div>
         {% elif mensaje == 'Error en el formulario de registro' %}
         <div class="alert alert-danger alert">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>{{ mensaje }}</strong>
+        </div>
+        {% elif mensaje == 'Codigo o NFC se encuentra en uso' %}
+        <div class="alert alert-danger alert-dismissible">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <strong>{{ mensaje }}</strong>
         </div>
@@ -282,12 +287,12 @@
   </section>
 
   <!-- Acciones -->
-  <section id="acciones" class="acciones-section bg-black">
+  <section id="acciones" class="login-section bg-black">
     <div class="container">
       <div class="row">
         <div class="col-md-1"></div>
-        <div class="col-md-5">
-          <div class="card card-body">
+        <div class="card card-body col-md-5">
+          <div class="form-group">
             <form action='/abrir' method='POST'>
               <div class="form-group">
                 <select class="form-control" name='laboratorio' id="laboratorio">
@@ -298,16 +303,13 @@
                   <option>L4-Electromedicina</option>
                   <option>L5-Telecomunicaciones</option>
                   <option>L6-Software</option>
+                  <option>Automatizacion</option>
                 </select>
               </div>
               <div class="form-group">
                 <button class="submit btn btn-primary btn-block">Abrir</button>
               </div>
             </form>
-          </div>
-        </div>
-        <div class="col-md-5">
-          <div class="card card-body">
             <form action='/cerrar' method='POST'>
               <div class="form-group">
                 <select class="form-control" name='laboratorio' id="laboratorio">
@@ -318,6 +320,7 @@
                   <option>L4-Electromedicina</option>
                   <option>L5-Telecomunicaciones</option>
                   <option>L6-Software</option>
+                  <option>Automatizacion</option>
                 </select>
               </div>
               <div class="form-group">
@@ -325,6 +328,31 @@
               </div>
             </form>
           </div>
+        </div>
+        <div class="col-md-auto"></div>
+        <div class="card card-body col-md-5">
+          <form action='/registroNFC' method='POST'>
+            <div class="form-group"><h5 class = "espacio centrar">Asignar a un usuario una Etiqueta NFC</h5>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <input type="text" name="nombre" placeholder="Nombre" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" name="apellido" placeholder="Apellido" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type='text' name='code' placeholder='Codigo' class="form-control">
+            </div>
+            <div class="form-group">
+              <button class="submit btn btn-primary btn-block">
+                Guardar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -338,6 +366,9 @@
         <div class="col-md-auto align-self-center">
           <div class="card card-body">
             <form action='/registro' method='POST'>
+              <div class="form-group">
+                <h5 class = "centrar">Añadir un usuario de monitor</h5>
+              </div>
               <div class="form-group">
                 <div class="row">
                   <div class="col-md-6">

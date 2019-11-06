@@ -20,7 +20,7 @@
   }
 
   #mainNav .nav-link:hover {
-    color: rgba(255, 80, 80, 1);
+    color: rgba(34, 167, 240, 1);
   }
 
   #mainNav.navbar-shrink {
@@ -34,7 +34,7 @@
   }
 
   #mainNav.navbar-shrink .nav-link:hover {
-    color: rgba(255, 80, 80, 1);
+    color: blue:
   }
 
   #mainNav.navbar-shrink .nav-link.active {
@@ -58,8 +58,8 @@
 }
 
 .masthead h1 {
-  font-family: 'Varela Round'; /* Letra para cambiar */
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6) 0%, rgba(255, 80, 80, 0.6) 100%, #161616 100%);
+  font-family: 'Abril Fatface', cursive;
+  background: linear-gradient(to bottom, rgba(34, 167, 240, 0.8) 0%, rgba(34, 167, 240, 0.2) 100%, #161616 100%);
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
 }
@@ -107,18 +107,18 @@
 }
 
 .btn-primary:hover {
-  color: rgba(255, 80, 80, 1);
+  color: rgba(34, 167, 240, 1);
   background-color: black;
 }
 
 .btn-primary:focus {
   background-color: black;
-  color: rgba(255, 80, 80, 1);
+  color: rgba(34, 167, 240, 1);
 }
 
 .btn-primary:active {
   background-color: black !important;
-  color: rgba(255, 80, 80, 1);
+  color: rgba(34, 167, 240, 1);
 }
 
 .horario-section {
@@ -130,6 +130,11 @@
 .login-section {
   padding: 9rem 0;
 }
+
+.acciones-section {
+  padding: 12rem 0;
+}
+
 
 .contact-section {
   padding: 7rem 0 0;
@@ -178,7 +183,7 @@ a {
 
 a:focus, a:hover {
   text-decoration: none;
-  color: rgba(255, 80, 80, 1);
+  color: rgba(34, 167, 240, 1);
 }
 
 .bg-black {
@@ -208,4 +213,13 @@ footer {
   position: relative;
   width: 100%;
   max-width: 22%;
+}
+
+.centrar {
+ text-align: center;
+}
+
+.espacio {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
 }

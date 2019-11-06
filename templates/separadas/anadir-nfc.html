@@ -1,0 +1,28 @@
+{% extends "separadas/index.html" %}
+
+{% block test %}
+<div class="row">
+    <div class="card card-body">
+      <form action='/test' method='POST'>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-6">
+              <input type="text" name="nombre" placeholder="Nombre" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <input type="text" name="apellido" placeholder="Apellido" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type='text' name='codigo' placeholder='Codigo' class="form-control">
+        </div>
+        <div class="form-group">
+          <button class="submit btn btn-primary btn-block">
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

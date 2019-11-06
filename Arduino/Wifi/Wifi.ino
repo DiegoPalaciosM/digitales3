@@ -3,12 +3,13 @@ WiFiServer wifiServer(42777);
 const char* ssid = "";
 const char* password =  "";
 
-int L1 = 16;    //D0
-int L2 = 5;     //D1
-int L3 = 4;     //D2
-int L4 = 0;     //D3
-int L5 = 2;     //D4
-int L6 = 14;    //D5
+int L1 = 16;
+int L2 = 5;
+int L3 = 4;
+int L4 = 0;
+int L5 = 14;
+int L6 = 12;
+int Automatizacion = 2;
 
 void Accion(char comando) {
 
@@ -48,7 +49,12 @@ void Accion(char comando) {
   else if (comando == '6') {
     digitalWrite(L6, LOW);    // Activo L6
   }
-
+    if (comando == 'g') {
+    digitalWrite(Automatizacion, HIGH);   // Desactivo Automatizacion
+  }
+  else if (comando == '7') {
+    digitalWrite(Automatizacion, LOW);    // Activo Automatizacion
+  }
 
   return;
 }
@@ -71,12 +77,14 @@ void setup() {
   pinMode(L4, OUTPUT);
   pinMode(L5, OUTPUT);
   pinMode(L6, OUTPUT);
+  pinMode(Automatizacion, OUTPUT);
   digitalWrite(L1, HIGH);
   digitalWrite(L2, HIGH);
   digitalWrite(L3, HIGH);
   digitalWrite(L4, HIGH);
   digitalWrite(L5, HIGH);
   digitalWrite(L6, HIGH);
+  digitalWrite(Automatizacion, HIGH);
 }
 
 void loop() {
