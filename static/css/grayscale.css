@@ -68,8 +68,16 @@
   font-family: 'Varela Round';
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.4) 85%, #161616 100%);
   -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
+  -webkit-background-clip: text;Laboratorios Electronica
 
+}
+
+
+.masthead h3 {
+  font-family: 'Abril Fatface', cursive;
+  background: linear-gradient(to bottom, rgba(34, 167, 240, 0.8) 0%, rgba(34, 167, 240, 0.2) 100%, #161616 100%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
 }
 @media (min-width: 992px) {
   .masthead {
@@ -88,6 +96,13 @@
     line-height: 1.5rem;
     letter-spacing: 0.5rem;
   }
+
+  .masthead h3 {
+    font-size: 3rem;
+    line-height: 3rem;
+    letter-spacing: 0.5rem;
+  }
+
 
 }
 
@@ -206,13 +221,13 @@ footer {
   position: relative;
   width: 100%;
   padding-left: 15px;
-  max-width: 78%;
+  max-width: 77%;
 }
 
 .col-custom2 {
   position: relative;
   width: 100%;
-  max-width: 22%;
+  max-width: 23%;
 }
 
 .centrar {
@@ -222,4 +237,10 @@ footer {
 .espacio {
   padding-bottom: 1rem;
   padding-top: 1rem;
+}
+
+.centrarT {
+  width: 100%;
+  margin: auto;
+  align-self: center;
 }

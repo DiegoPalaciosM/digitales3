@@ -38,5 +38,16 @@
   navbarCollapse();
   // Collapse the navbar when page is scrolled
   $(window).scroll(navbarCollapse);
+  (function() {
+    let vid = document.getElementById("video");
+
+    function playVid() {
+      vid.play();
+    }
+
+    function pauseVid() {
+      vid.pause();
+    }
+  })();
 
 })(jQuery); // End of use strict

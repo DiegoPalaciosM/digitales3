@@ -1,36 +1,81 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-from flask_mysqldb import MySQL
+from flask import *
+from flask_mysqldb import *
 import socket
-import time
+from time import *
 import serial
-import threading
+from threading import *
 import MySQLdb
-import datetime
+from datetime import *
 import sys
 import netifaces as ni
-ID = 0
-ip_page = ni.ifaddresses('wlp2s0')[ni.AF_INET][0]['addr']
-Lector = serial.Serial('/dev/ttyACM0', 9600)
-Lector.reset_input_buffer()
-Lector.close()
+
+
+class EstadoLaboratorio:
+    def __init__(self, Laboratorio, Estado, Hora, Tipo, Clase):
+        self.Laboratorio = Laboratorio
+        self.Estado = Estado
+        self.Hora = Hora
+        self.Tipo = Tipo
+        self.Clase = Clase
+
+    def ActualizarEstado(self, Estado, Hora, Tipo, Clase):
+        self.Estado = Estado
+        self.Hora = Hora
+        self.Tipo = Tipo
+        self.Clase = Clase
+
+L1 = EstadoLaboratorio('L1-General', 'Cerrado', '12:00', "Horario", "Libre")
+L2 = EstadoLaboratorio('L2-Industrial', 'Cerrado', '12:00', "Horario", "Libre")
+L3 = EstadoLaboratorio('L3-Materiales', 'Cerrado', '12:00', "Horario", "Libre")
+L4 = EstadoLaboratorio('L4-Electomedicina', 'Cerrado', '12:00', "Horario", "Libre")
+L5 = EstadoLaboratorio('L5-Telecomunicaciones', 'Cerrado', '12:00', "Horario", "Libre")
+L6 = EstadoLaboratorio('L6-Software', 'Cerrado', '12:00', "Horario", "Libre")
+Automatizacion = EstadoLaboratorio('Automatizacion', 'Cerrado', '12:00', "Horario", "Libre")
+
+class Automatico(Thread):
+    def __init__(self, Nombre, funcion, Delay):
+        super(Automatico, self).__init__()
+        self.estado = True
+        self.funcion = funcion
+        self.nombre = Nombre
+        self.delay = Delay
+
+    def stop(self):
+        self.estado = False
+        print ("Stop")
+
+    def restart(self):
+        self.estado = True
+
+    def run(self):
+        print (self.nombre+"Iniciado")
+        while True:
+            while self.estado:
+                self.funcion()
+                sleep(self.delay)
 
 # Configuracion inical
 
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '2469'
+app.config['MYSQL_PASSWORD'] = 'ldpp'
 app.config['MYSQL_DB'] = 'Horario'
 app.secret_key = 'UwU'
 mysql = MySQL(app)
 ip = sys.argv[1]
-Añadir = True
+print (ip)
 
 # Direcctorio laboratorio
 dion = {'L1-General': '1', 'L2-Industrial': '2', 'L3-Materiales': '3',
-        'L4-Electromedicina': '4', 'L5-Telecomunicaciones': '5', 'L6-Software': '6', 'Automatizacion': '5'}
+        'L4-Electromedicina': '4', 'L5-Telecomunicaciones': '5', 'L6-Software': '6', 'Automatizacion': '7'}
 dioff = {'L1-General': 'a', 'L2-Industrial': 'b', 'L3-Materiales': 'c',
-         'L4-Electromedicina': 'd', 'L5-Telecomunicaciones': 'e', 'L6-Software': 'f', 'Automatizacion': 'e'}
+         'L4-Electromedicina': 'd', 'L5-Telecomunicaciones': 'e', 'L6-Software': 'f', 'Automatizacion': 'g'}
+
+global Labos
+Labos = {'L1-General': L1, 'L2-Industrial': L2, 'L3-Materiales': L3,
+         'L4-Electromedicina': L4, 'L5-Telecomunicaciones': L5, 'L6-Software': L6, 'Automatizacion': Automatizacion}
+
 
 # Pagina
 @app.route('/')
@@ -39,20 +84,24 @@ def main():
     cur.execute('SELECT * FROM uno')
     data = cur.fetchall()
     cur.close()
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM nfc')
+    data1 = cur.fetchall()
+    cur.close()
     if 'account' in session:
         acc = session['account'].title()
     else:
         acc = ''
     if 'Logged' in session:
-        return render_template('abrir.html', user=acc, horarios=data)
+        return render_template('abrir.html', user=acc, horarios=data, l1 = L1, l2 = L2, l3 = L3, l4 = L4, l5 = L5, l6 = L6)
     elif 'Edit' in session:
-        return render_template('editar.html', user=acc, horarios=data)
+        return render_template('editar.html', user=acc, horarios=data, l1 = L1, l2 = L2, l3 = L3, l4 = L4, l5 = L5, l6 = L6)
     elif 'NFC' in session:
-        return render_template('NFC.html', user=acc, horarios=data)
+        return render_template('NFC.html', user=acc, horarios=data, nfcs=data1, l1 = L1, l2 = L2, l3 = L3, l4 = L4, l5 = L5, l6 = L6)
     elif 'TodoPoderoso' in session:
-        return render_template('TodoPoderoso.html', user=acc, horarios=data)
+        return render_template('TodoPoderoso.html', user=acc, horarios=data, nfcs=data1, l1 = L1, l2 = L2, l3 = L3, l4 = L4, l5 = L5, l6 = L6)
     else:
-        return render_template('nologin.html', horarios=data)
+        return render_template('nologin.html', horarios=data, l1 = L1, l2 = L2, l3 = L3, l4 = L4, l5 = L5, l6 = L6)
 
 # Relacionado con la sesion
 @app.route('/auth', methods=['POST'])
@@ -210,6 +259,8 @@ def Abrir():
             return (redirect(url_for('main')))
         mensaje = dion[lab]
         TCP(mensaje, ip)
+        HoraA = datetime.now().strftime("%H:%M")
+        Labos[lab].ActualizarEstado("Abierto",HoraA,"Monitor", "Libre")
         flash('Seguro de %s abierto' % (lab))
     return redirect(url_for('main'))
 
@@ -223,6 +274,8 @@ def Cerrar():
             return (redirect(url_for('main')))
         mensaje = dioff[lab]
         TCP(mensaje, ip)
+        HoraA = datetime.now().strftime("%H:%M")
+        Labos[lab].ActualizarEstado("Cerrado",HoraA,"Monitor", "Libre")
         flash('Seguro de %s cerrado' % (lab))
     return redirect(url_for('main'))
 
@@ -230,7 +283,7 @@ def Cerrar():
 @app.route('/abrirauto', methods=['POST'])
 def AbrirAuto():
     if request.method == 'POST':
-        TCP('5', ip)
+        TCP('7', ip)
         flash('Seguro abierto')
     return redirect(url_for('main'))
 
@@ -238,113 +291,151 @@ def AbrirAuto():
 @app.route('/cerrarauto', methods=['POST'])
 def CerrarAuto():
     if request.method == 'POST':
-        TCP('e', ip)
+        TCP('g', ip)
         flash('Seguro cerrado')
     return redirect(url_for('main'))
 
 # NFC
 @app.route('/registroNFC', methods=['POST'])
 def RegistroNFC():
-    global Añadir
-    if request.method == 'POST':
-        name = str(request.form['nombre'])
-        lastname = str(request.form['apellido'])
-        code = str(request.form['code'])
-        RID = NFC(Añadir)
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM nfc")
-        data = cur.fetchall()
-        mysql.connection.commit()
-        existe = 0
-        for x in data:
-            if int(x[4]) == int(ID) or int(x[3]) == int(code):
-                existe = 1
-                break
-            else:
-                existe = 0
-        if existe:
-            flash('Codigo o NFC se encuentra en uso')
-            return redirect(url_for('main'))
-        else:
-            if name != "" and lastname != "":
-                cur = mysql.connection.cursor()
-                cur.execute("INSERT INTO nfc (Nombre, Apellido, Codigo, NFC) VALUES ('%s', '%s', '%s', '%s');" % (
-                    name, lastname, code, ID))
-                mysql.connection.commit()
-                flash('Usuario registrado')
+    try:
+        if request.method == 'POST':
+            name = str(request.form['nombre'])
+            lastname = str(request.form['apellido'])
+            code = str(request.form['code'])
+            hora1 = str(request.form['ini'])
+            hora2 = str(request.form['fin'])
+            AutoNFC.stop()
+            Lector.write(1)
+            sleep(1)
+            Lector.reset_input_buffer()
+            Data = str(Lector.readline())
+            Lector.reset_input_buffer()
+            AutoNFC.restart()
+            ID = Data.split("A")[1]
+            cur = mysql.connection.cursor()
+            cur.execute("SELECT * FROM nfc")
+            data = cur.fetchall()
+            mysql.connection.commit()
+            existe = 0
+            print (data)
+            for x in data:
+                if int(x[4]) == int(ID) or int(x[3]) == int(code):
+                    existe = 1
+                    break
+                else:
+                    existe = 0
+            if existe:
+                flash('Codigo o NFC se encuentra en uso')
                 return redirect(url_for('main'))
-    flash('Error en el formulario de registro')
+            else:
+                if name != "" and lastname != "":
+                    cur = mysql.connection.cursor()
+                    cur.execute("INSERT INTO nfc (Nombre, Apellido, Codigo, NFC, Inicio, Fin) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');" % (
+                        name, lastname, code, ID, hora1, hora2))
+                    mysql.connection.commit()
+                    flash('Usuario registrado')
+                    return redirect(url_for('main'))
+    except:
+        flash('Error en el formulario de registro')
+        return redirect(url_for('main'))
+
+@app.route('/eliminarnfc/<id>')
+def EliminarNFC(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM nfc WHERE id = {};'.format(id))
+    mysql.connection.commit()
+    flash('Etiqueta Eliminada')
     return redirect(url_for('main'))
 
-# Test
-@app.route('/test')
-def TEST():
-    return render_template('separadas/index.html')
 
 # Acciones
-
 
 def TCP(mensaje, ip):
     server_address = (ip, 42777)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect(server_address)
     sock.send(mensaje.encode("utf-8"))
-    time.sleep(0.5)
+    sleep(0.5)
     sock.close()
 
 
 def AOD():
     Horas = {'1': 'Lunes, LFin', '2': 'Martes, MaFin', '3': 'Miercoles, MiFin',
              '4': 'Jueves, JuFin', '5': 'Viernes, ViFin', '6': 'Sabado, SaFin'}
-    DiaW = datetime.datetime.now().strftime("%w")
-    HoraA = datetime.datetime.now().strftime("%H:%M")
+    DiaW = datetime.now().strftime("%w")
+    HoraA = datetime.now().strftime("%H:%M")
     HoraP = 0
-
-    while True:
-        if HoraA != HoraP:
-            mysql = MySQLdb.connect(host="localhost", passwd="2469",
-                                    user="root", db="Horario")
-            cur = mysql.cursor()
-            cur.execute(
-                ("SELECT Laboratorio, {} FROM uno").format(Horas[DiaW]))
-            DataAuto = list(cur.fetchall())
-            cur.close()
-        HoraP = HoraA
-        HoraA = datetime.datetime.now().strftime("%H:%M")
-        if len(DataAuto) != 0:
-            for x in DataAuto:
-                if x[1] == HoraA:
-                    TCP(dion[x[0]], ip)
-                if x[2] == HoraA:
-                    TCP(dioff[x[0]], ip)
-
-
-def NFC():
-    global ID
-    while True:
-        Lector = serial.Serial('/dev/ttyACM0', 9600)
-        mysql = MySQLdb.connect(host="localhost", passwd="2469",
+    #Labos = {'L1-General': L1, 'L2-Industrial': L2, 'L3-Materiales': L3, 'L4-Electromedicina': L4, 'L5-Telecomunicaciones': L5, 'L6-Software': L6, 'Automatizacion': Automatizacion}
+    if HoraA != HoraP:
+        mysql = MySQLdb.connect(host="localhost", passwd="ldpp",
                                 user="root", db="Horario")
         cur = mysql.cursor()
-        cur.execute("SELECT NFC FROM nfc")
+        cur.execute(
+            ("SELECT Laboratorio, Clase, {} FROM uno").format(Horas[DiaW]))
+        DataAuto = list(cur.fetchall())
+        cur.close()
+    HoraP = HoraA
+    HoraA = datetime.now().strftime("%H:%M")
+    if len(DataAuto) != 0:
+        for x in DataAuto:
+            if x[2] == HoraA:
+                TCP(dion[x[0]], ip)
+                HoraA = datetime.now().strftime("%H:%M")
+                Labos[x[0]].ActualizarEstado("Abierto",HoraA,"Horario",x[1])
+            if x[3] == HoraA:
+                TCP(dioff[x[0]], ip)
+                HoraA = datetime.now().strftime("%H:%M")
+                Labos[x[0]].ActualizarEstado("Cerrado",HoraA,"Horario",x[1])
+
+def NFC():
+        mysql = MySQLdb.connect(host="localhost", passwd="ldpp",
+                                user="root", db="Horario")
+        cur = mysql.cursor()
+        cur.execute("SELECT NFC, Inicio, Fin FROM nfc")
         DataNfc = list(cur.fetchall())
         cur.close()
-        txt = str(Lector.readline())
-        ID = txt.split("A")[1]
-        #print (ID)
+        try:
+            ID = str(Lector.readline()).split("A")[1]
+        except:
+            ID = str(Lector.readline())
         Lector.reset_input_buffer()
-        Lector.close()
+        print (ID)
         for x in DataNfc:
             if ID == x[0]:
-                TCP('7', '192.168.0.6')
-                time.sleep(2)
-                TCP('g', '192.168.0.6')
+                HIni = x[1]
+                HFin = x[2]
+                HActual = datetime.now().strftime('%H:%M')
+                HIni = datetime.strptime(HIni, '%H:%M')
+                HFin = datetime.strptime(HFin, '%H:%M')
+                HActual = datetime.strptime(HActual, '%H:%M')
+                if HIni <= HActual and HActual < HFin:
+                    print ("Acceso Concedido")
+                    TCP('7', ip)
+                    sleep(2)
+                    TCP('g', ip)
+        if ID == 'Cerrar':
+            print ("Aqui prro")
 
-
+# Test
+@app.route('/test')
+def TEST():
+    AutoNFC.stop()
+    Lector.write(1)
+    sleep(2)
+    text = str(Lector.readline())
+    AutoNFC.restart()
+    ID = text.split("A")[1]
+    return ID
 # Iniciar pagina
 if __name__ == '__main__':
-    AutoData = threading.Thread(target=AOD)
-    AutoData.start()
-    NFCAuto = threading.Thread(target=NFC)
-    NFCAuto.start()
-    app.run(host=ip_page, port=5000, debug=True)
+    ip_page = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+    Lector = serial.Serial('/dev/ttyACM0', 9600)
+    Lector.reset_input_buffer()
+    Lector.close()
+    Lector = serial.Serial('/dev/ttyACM0', 9600)
+    AutoAOD = Automatico("AOD",AOD,1)
+    AutoAOD.start()
+    AutoNFC = Automatico("NFC",NFC,3)
+    AutoNFC.start()
+    app.run(host=ip_page, port=80)

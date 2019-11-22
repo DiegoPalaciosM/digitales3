@@ -8,18 +8,17 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>A.O.D</title>
+  <title>Laboratorios Electronica</title>
 
   <!-- Bootstrap core CSS -->
   <link href="static/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
   <link href="static/vendor/fontawesome-free/css/all.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
-  
+  <link href="static/Fonts/Anton.css" rel="stylesheet">
+  <link href="static/Fonts/April.css" rel="stylesheet">
+  <link href="static/Fonts/Nunito.css" rel="stylesheet">
+  <link href="static/Fonts/Varela.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="static/css/grayscale.css" rel="stylesheet">
@@ -90,6 +89,11 @@
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
           <strong>{{ mensaje }}</strong>
         </div>
+        {% elif mensaje == 'Error en la lectura, vuelve a intentarlo' %}
+        <div class="alert alert-danger alert-dismissible">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+          <strong>{{ mensaje }}</strong>
+        </div>
         {% else %}
         <div class="alert alert-success alert-dismissible">
           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -103,7 +107,7 @@
     </div>
     <div class="container d-flex h-custom align-items-center">
       <div class="mx-custom text-left">
-        <h1 class="mx-n4 my-0">Automatic </br>Open Door</h1>
+        <h3 class="mx-n4 my-0">Desbloqueo automatico y </br>remoto de los laboratorios</h3>
       </div>
     </div>
   </header>

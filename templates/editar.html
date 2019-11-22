@@ -8,18 +8,17 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>A.O.D</title>
+  <title>Laboratorios Electronica</title>
 
   <!-- Bootstrap core CSS -->
   <link href="static/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
   <!-- Custom fonts for this template -->
   <link href="static/vendor/fontawesome-free/css/all.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Anton&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface&display=swap" rel="stylesheet">
-  
+  <link href="static/Fonts/Anton.css" rel="stylesheet">
+  <link href="static/Fonts/April.css" rel="stylesheet">
+  <link href="static/Fonts/Nunito.css" rel="stylesheet">
+  <link href="static/Fonts/Varela.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="static/css/grayscale.css" rel="stylesheet">
@@ -48,13 +47,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#acciones">
-              <h4>Acciones</h4>
+            <a class="nav-link js-scroll-trigger" href="#estado">
+              <h4>Estado</h4>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#registro">
-              <h4>Registro</h4>
+            <a class="nav-link js-scroll-trigger" href="#acciones">
+              <h4>Acciones</h4>
             </a>
           </li>
           <li class="nav-item">
@@ -118,7 +117,7 @@
     </div>
     <div class="container d-flex h-custom align-items-center">
       <div class="mx-custom text-left">
-        <h1 class="mx-n4 my-0">Automatic </br>Open Door</h1>
+        <h3 class="mx-n4 my-0">Desbloqueo automatico y </br>remoto de los laboratorios</h3>
       </div>
     </div>
   </header>
@@ -278,16 +277,80 @@
         </div>
       </div>
     </div>
+  </section>
 
+  <!-- Estado -->
+  <section id="estado" class="login-section bg-black">
+    <div class="container">
+      <div class="row centrar centrarT">
+        <div class="col-custom1 my-custom-scrollbar centrar centrarT">
+          <table class="table table-striped table-hover table-bordered table-sm bg-white table-responsive">
+            <thead>
+              <tr>
+                <td class='col-md-2'>Laboratorio</td>
+                <td class='col-md-1'>Estado</td>
+                <td class='col-md-2'>Clase</td>
+                <td class='col-md-3'>Utimo cambio de Estado</td>
+                <td class='col-md-2'>Tipo</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ l1.Laboratorio }}</td>
+                <td>{{ l1.Estado }}</td>
+                <td>{{ l1.Clase }}</td>
+                <td>{{ l1.Hora }}</td>
+                <td>{{ l1.Tipo }}</td>
+              </tr>
+              <tr>
+                <td>{{ l2.Laboratorio }}</td>
+                <td>{{ l2.Estado }}</td>
+                <td>{{ l2.Clase }}</td>
+                <td>{{ l2.Hora }}</td>
+                <td>{{ l2.Tipo }}</td>
+              </tr>
+              <tr>
+                <td>{{ l3.Laboratorio }}</td>
+                <td>{{ l3.Estado }}</td>
+                <td>{{ l3.Clase }}</td>
+                <td>{{ l3.Hora }}</td>
+                <td>{{ l3.Tipo }}</td>
+              </tr>
+              <tr>
+                <td>{{ l4.Laboratorio }}</td>
+                <td>{{ l4.Estado }}</td>
+                <td>{{ l4.Clase }}</td>
+                <td>{{ l4.Hora }}</td>
+                <td>{{ l4.Tipo }}</td>
+              </tr>
+              <tr>
+                <td>{{ l5.Laboratorio }}</td>
+                <td>{{ l5.Estado }}</td>
+                <td>{{ l5.Clase }}</td>
+                <td>{{ l5.Hora }}</td>
+                <td>{{ l5.Tipo }}</td>
+              </tr>
+              <tr>
+                <td>{{ l6.Laboratorio }}</td>
+                <td>{{ l6.Estado }}</td>
+                <td>{{ l6.Clase }}</td>
+                <td>{{ l6.Hora }}</td>
+                <td>{{ l6.Tipo }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Acciones -->
-  <section id="acciones" class="acciones-section bg-black">
+  <section id="acciones" class="login-section bg-black">
     <div class="container">
       <div class="row">
         <div class="col-md-1"></div>
-        <div class="col-md-5">
-          <div class="card card-body">
+        <div class="card card-body col-md-5">
+          <div class="form-group">
             <form action='/abrir' method='POST'>
               <div class="form-group">
                 <select class="form-control" name='laboratorio' id="laboratorio">
@@ -298,16 +361,13 @@
                   <option>L4-Electromedicina</option>
                   <option>L5-Telecomunicaciones</option>
                   <option>L6-Software</option>
+                  <option>Automatizacion</option>
                 </select>
               </div>
               <div class="form-group">
                 <button class="submit btn btn-primary btn-block">Abrir</button>
               </div>
             </form>
-          </div>
-        </div>
-        <div class="col-md-5">
-          <div class="card card-body">
             <form action='/cerrar' method='POST'>
               <div class="form-group">
                 <select class="form-control" name='laboratorio' id="laboratorio">
@@ -318,6 +378,7 @@
                   <option>L4-Electromedicina</option>
                   <option>L5-Telecomunicaciones</option>
                   <option>L6-Software</option>
+                  <option>Automatizacion</option>
                 </select>
               </div>
               <div class="form-group">
@@ -326,52 +387,46 @@
             </form>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Registro -->
-  <section id="registro" class="login-section bg-black">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-custom"> </div>
-        <div class="col-md-auto align-self-center">
-          <div class="card card-body">
-            <form action='/registro' method='POST'>
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-md-6">
-                    <input type="text" name="nombre" placeholder="Nombre" class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <input type="text" name="apellido" placeholder="Apellido" class="form-control">
-                  </div>
+        <div class="col-md-auto"></div>
+        <div class="card card-body col-md-5">
+          <form action='/registro' method='POST'>
+            <div class="form-group">
+              <h5 class="centrar">Añadir un usuario de monitor</h5>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <input type="text" name="nombre" placeholder="Nombre" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <input type="text" name="apellido" placeholder="Apellido" class="form-control">
                 </div>
               </div>
-              <div class="form-group">
-                <input type='text' name='user' placeholder='Usuario' class="form-control">
-              </div>
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-md-6">
-                    <input type='password' name='pass' placeholder='Contraseña' class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <input type='password' name='cfpass' placeholder='Confirmar Contraseña' class="form-control">
-                  </div>
+            </div>
+            <div class="form-group">
+              <input type='text' name='user' placeholder='Usuario' class="form-control">
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-md-6">
+                  <input type='password' name='pass' placeholder='Contraseña' class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <input type='password' name='cfpass' placeholder='Confirmar Contraseña' class="form-control">
                 </div>
               </div>
-              <div class="form-group">
-              </div>
-              <div class="form-group">
-                <button class="submit btn btn-primary btn-block">
-                  Guardar
-                </button>
-              </div>
-            </form>
-          </div>
+            </div>
+            <div class="form-group">
+            </div>
+            <div class="form-group">
+              <button class="submit btn btn-primary btn-block">
+                Guardar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
   </section>
 
   <!-- Contacto -->
