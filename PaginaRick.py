@@ -3,11 +3,11 @@ from flask_mysqldb import *
 import netifaces as ni
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = '2469'
-app.config['MYSQL_DB'] = 'Horario'
-app.secret_key = 'UwU'
+app.config['MYSQL_HOST'] = 'Direccion MySQL'
+app.config['MYSQL_USER'] = 'User'
+app.config['MYSQL_PASSWORD'] = 'Pass'
+app.config['MYSQL_DB'] = 'DB'
+app.secret_key = 'Key'
 mysql = MySQL(app)
 
 @app.route('/')
